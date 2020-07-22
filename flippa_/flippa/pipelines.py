@@ -25,14 +25,13 @@ class FlippaPipeline:
                 title text,
                 type_ text,
                 monetization text,
-                net int)""")
-                # price int,
-                # monthly_net int,
-                # age_of_site int,
-                # site_type text,
-                # multiple_by_month int,
-                # multiple_by_year int, 
-                # platform text
+                net int,
+                price int,
+                monthly_net int,
+                age_of_site int,
+                site_type text,
+                multiple dec, 
+                platform text)""")
             
 
     def process_item(self, item, spider):
@@ -42,20 +41,19 @@ class FlippaPipeline:
 
     def store_db(self, item):
         for j in range(len(item["net"])):
-            self.curr.execute("""insert into Flippa_tb values (%s, %s, %s, %s)""",(
+            self.curr.execute("""insert into Flippa_tb values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",(
                 item['title'][j],
                 item['type_'][j],
                 item['monetization'][j],
-                item['net'][j]))
-                # item['gross_rev'][j],
-                # item['unique_visits'],
-                # item['page_views']))
-                # item['price'][j],
-                # item['monthly_net'][j], 
-                # item['age_of_site'][j],
-                # item['site_type'][j], 
-                # item['multiple_by_month'][j],
-                # item['multiple_by_year'][j], 
-                # item['platform'][j]))
+                item['net'][j],
+                item['gross_rev'][j],
+                item['unique_visits'],
+                item['page_views'],
+                item['price'][j],
+                item['multiple'][j],
+                item['monthly_net'][j], 
+                item['age_of_site'][j],
+                item['site_type'][j],  
+                item['platform'][j]))
             
             self.conn.commit()
