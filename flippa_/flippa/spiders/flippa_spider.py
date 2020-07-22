@@ -48,7 +48,7 @@ class FlippaSpider(scrapy.Spider):
 
     
     
-    ip proxies to not get banned
+    # ip proxies to not get banned
     def get_proxies():
         url = 'https://free-proxy-list.net/'
         response = requests.get(url)
@@ -80,14 +80,6 @@ class FlippaSpider(scrapy.Spider):
             #We will just skip retries as its beyond the scope of this tutorial and we are only downloading a single url 
             print("Skipping. Connnection error")
 
-    
-    def start_requests(self):
-        url = 'https://flippa.com/search?filter%5Bprofit_per_month%5D%5Bmin%5D=1000&filter%5Bstatus%5D=open&filter%5Bproperty_type%5D=website,established_website,starter_site,fba,ios_app&filter%5Bsitetype%5D=all,content,blog,directory,review,forum-community,ecommerce,dropship,digital-products,shopify,inventory-holding,saas,services,digital,physical,transact-market'
-        yield scrapy.Request(
-            url = url, 
-            headers=self.headers, 
-            callback= self.parse
-       )
     
     def parse(self, response):
     
@@ -152,9 +144,9 @@ class FlippaSpider(scrapy.Spider):
             
                 # passing the scaped contain into a dic() called item
                
-                
-                items['price'] = [int(re.sub(r'[^0-9]', '', lst[4]))]
-                items['multiple'] = [float(re.sub(r"[a-zA-Z]+", "",lst[5]))]
+                #test = re.sub(r'[^0-9]', '', lst[4])
+               
+                #items['multiple'] = [float(re.sub(r"[a-zA-Z]+", "",lst[5]))]
                 items['title'] = [lst[0]]
                 items['type_'] = [lst[1]]
                 items['monetization'] = [lst[2]]
@@ -189,7 +181,19 @@ class FlippaSpider(scrapy.Spider):
                     x = list(x)
                     
                     
+                price = self.driver.find_elements_by_xpath('/html/body/div[5]/div/div[2]/div[1]/div[1]/div[2]/h2')
+               
+                
+                for i in price:
+                    p = i.text
+                    print(p)
+                    breakpoint()
+                    p = re.split('; |, |\*|\n', p)
+                    p = np.array(p)
+                    p = list(p)  
+                    print(p)
 
+                breakpoint()
                 site_type = [x[1]]
                 platform = [x[3]]
                 age_of_site = [int(re.sub(r'[^0-9]', '', x[5]))]
@@ -220,14 +224,12 @@ class FlippaSpider(scrapy.Spider):
                                     elst.append(j)
                 except IndexError:
                     elst = ['0','0']
-                    breakpoint()
+                    
 
                 page_views = [int(elst[0])]
-                breakpoint()
                 unique_visits = [int(elst[1])]
-                breakpoint()
                 gross_rev = [int(e[0])]
-                breakpoint()
+            
 
                 items['monthly_net'] = monthly_net
                 items['age_of_site'] = age_of_site
