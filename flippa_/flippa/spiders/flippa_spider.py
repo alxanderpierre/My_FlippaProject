@@ -191,13 +191,16 @@ class FlippaSpider(scrapy.Spider):
                     p = re.split('; |, |\*|\n', p)
                     p = np.array(p)
                     p = list(p)  
+                    p = [int(re.sub(r'[^0-9]', '', p[0]))]
                     print(p)
+                    breakpoint()
 
                 breakpoint()
                 site_type = [x[1]]
                 platform = [x[3]]
                 age_of_site = [int(re.sub(r'[^0-9]', '', x[5]))]
                 monthly_net = [int(re.sub(r'[^0-9]', '', x[7]))]
+                price = p
                 sleep(5)
                 
                 for j in gross:
@@ -238,8 +241,9 @@ class FlippaSpider(scrapy.Spider):
                 items['gross_rev'] = gross_rev
                 items['page_views'] = page_views
                 items['unique_visits'] = unique_visits
+                items['price'] = price
                 print('this is :', items)
-                
+                breakpoint()
                 yield items
 
                 self.driver.back()
