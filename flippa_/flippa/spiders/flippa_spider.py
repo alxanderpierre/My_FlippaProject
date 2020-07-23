@@ -85,7 +85,7 @@ class FlippaSpider(scrapy.Spider):
     
         self.driver = webdriver.Chrome("/Users/alxander44/Desktop/chromedriver")
         
-        self.driver.get('https://flippa.com/search?filter%5Bprofit_per_month%5D%5Bmin%5D=1000&filter%5Bstatus%5D=open&filter%5Bproperty_type%5D=website,established_website,starter_site,fba,ios_app&filter%5Bsitetype%5D=all,content,blog,directory,review,forum-community,ecommerce,dropship,digital-products,shopify,inventory-holding,saas,services,digital,physical,transact-market')
+        self.driver.get('https://flippa.com/search?filter%5Bprofit_per_month%5D%5Bmin%5D=1000&filter%5Bstatus%5D=open&filter%5Bproperty_type%5D=website,established_website,starter_site,fba,ios_app&filter%5Bsitetype%5D=all,content,blog,directory,review,forum-community,ecommerce,dropship,digital-products,shopify,inventory-holding,saas,services,digital,physical,transact-market&page%5Bnumber%5D=3')
         sleep(3)
 
         self.signin_button = self.driver.find_element_by_link_text('Sign In')
@@ -187,16 +187,15 @@ class FlippaSpider(scrapy.Spider):
                 for i in price:
                     p = i.text
                     print(p)
-                    breakpoint()
                     p = re.split('; |, |\*|\n', p)
                     p = np.array(p)
                     p = list(p)  
                     p = [int(re.sub(r'[^0-9]', '', p[0]))]
                     print(p)
-                    breakpoint()
 
-                breakpoint()
+                
                 site_type = [x[1]]
+                breakpoint
                 platform = [x[3]]
                 age_of_site = [int(re.sub(r'[^0-9]', '', x[5]))]
                 monthly_net = [int(re.sub(r'[^0-9]', '', x[7]))]
@@ -225,13 +224,15 @@ class FlippaSpider(scrapy.Spider):
                                 j = re.sub('\D', '', j)
                                 if j != '':
                                     elst.append(j)
+                    page_views = [int(elst[0])]
+                    unique_visits = [int(elst[1])]
+                    gross_rev = [int(e[0])]
+                
                 except IndexError:
                     elst = ['0','0']
-                    
-
-                page_views = [int(elst[0])]
-                unique_visits = [int(elst[1])]
-                gross_rev = [int(e[0])]
+                    page_views = [int(elst[0])]
+                    unique_visits = [int(elst[1])]
+                    gross_rev = [int(e[0])]
             
 
                 items['monthly_net'] = monthly_net
@@ -243,9 +244,8 @@ class FlippaSpider(scrapy.Spider):
                 items['unique_visits'] = unique_visits
                 items['price'] = price
                 print('this is :', items)
-                breakpoint()
                 yield items
-
+            
                 self.driver.back()
                 sleep(2.5)
                 loops += 1
